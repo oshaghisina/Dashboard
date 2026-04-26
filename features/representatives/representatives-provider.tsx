@@ -79,7 +79,7 @@ export function RepresentativesProvider({
       name: input.name.trim(),
       notes: input.notes?.trim(),
       status: "inactive",
-      usage: { lastActive: now, sessions: 0, totalGb: 0 },
+      usage: { dailyUsage: [], lastActive: now, sessions: 0, totalGb: 0 },
     }
 
     setUsers((current) => [user, ...current])

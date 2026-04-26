@@ -13,6 +13,11 @@ export interface RepConfig {
   usedGb: number
 }
 
+export interface RepDailyUsage {
+  date: string
+  gb: number
+}
+
 export interface RepUser {
   id: string
   contact: string
@@ -21,6 +26,7 @@ export interface RepUser {
   notes?: string
   status: RepUserStatus
   usage: {
+    dailyUsage: RepDailyUsage[]
     lastActive: string
     sessions: number
     totalGb: number
@@ -79,7 +85,20 @@ export const representativeDemo = {
       name: "Ali Rezaei",
       notes: "Prefers Frankfurt configs.",
       status: "expiring",
-      usage: { lastActive: "2026-04-25T14:32:00.000Z", sessions: 47, totalGb: 38 },
+      usage: {
+        dailyUsage: [
+          { date: "Apr 20", gb: 4.2 },
+          { date: "Apr 21", gb: 6.8 },
+          { date: "Apr 22", gb: 3.1 },
+          { date: "Apr 23", gb: 7.5 },
+          { date: "Apr 24", gb: 5.9 },
+          { date: "Apr 25", gb: 8.2 },
+          { date: "Apr 26", gb: 2.3 },
+        ],
+        lastActive: "2026-04-25T14:32:00.000Z",
+        sessions: 47,
+        totalGb: 38,
+      },
     },
     {
       configs: [
@@ -98,7 +117,20 @@ export const representativeDemo = {
       joinedAt: "2026-04-09T09:00:00.000Z",
       name: "Sara Mohammadi",
       status: "active",
-      usage: { lastActive: "2026-04-26T10:10:00.000Z", sessions: 19, totalGb: 12 },
+      usage: {
+        dailyUsage: [
+          { date: "Apr 20", gb: 1.1 },
+          { date: "Apr 21", gb: 2.3 },
+          { date: "Apr 22", gb: 0.8 },
+          { date: "Apr 23", gb: 1.9 },
+          { date: "Apr 24", gb: 2.5 },
+          { date: "Apr 25", gb: 1.7 },
+          { date: "Apr 26", gb: 1.7 },
+        ],
+        lastActive: "2026-04-26T10:10:00.000Z",
+        sessions: 19,
+        totalGb: 12,
+      },
     },
     {
       configs: [],
@@ -107,7 +139,20 @@ export const representativeDemo = {
       joinedAt: "2026-04-11T09:00:00.000Z",
       name: "Reza Karimi",
       status: "inactive",
-      usage: { lastActive: "2026-04-11T09:00:00.000Z", sessions: 0, totalGb: 0 },
+      usage: {
+        dailyUsage: [
+          { date: "Apr 20", gb: 0 },
+          { date: "Apr 21", gb: 0 },
+          { date: "Apr 22", gb: 0 },
+          { date: "Apr 23", gb: 0 },
+          { date: "Apr 24", gb: 0 },
+          { date: "Apr 25", gb: 0 },
+          { date: "Apr 26", gb: 0 },
+        ],
+        lastActive: "2026-04-11T09:00:00.000Z",
+        sessions: 0,
+        totalGb: 0,
+      },
     },
   ] satisfies RepUser[],
 }

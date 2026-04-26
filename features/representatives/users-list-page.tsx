@@ -70,24 +70,67 @@ export function UsersListPage({ createOpen }: { createOpen?: boolean }) {
               />
             ) : (
               <div className="space-y-2">
-                {filteredUsers.map((user) => (
-                  <div key={user.id} className="grid gap-3 rounded-xl border px-3.5 py-3 md:grid-cols-[1fr_140px_120px_120px_auto] md:items-center">
-                    <div>
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.contact}</p>
+                {filteredUsers.map((user) => {
+                  const totalCap = user.configs.reduce((sum, c) => sum + (c.dataCapGb ?? 0), 0)
+                  const usedGb = user.usage.totalGb
+                  const percent = totalCap > 0 ? Math.min((usedGb / totalCap) * 100, 100) : 0
+                  const barColor =
+                    totalCap === 0
+                      ? "bg-muted-foreground/30"
+                      : percent >= 90
+                        ? "bg-destructive"
+                        : percent >= 75
+                          ? "bg-amber-500"
+                          : "bg-primary"
+                  const statusLabel =
+                    user.status === "active"
+                      ? locale === "fa" ? "فعال" : "Active"
+                      : user.status === "expiring"
+                        ? locale === "fa" ? "در حال انقضا" : "Expiring"
+                        : locale === "fa" ? "غیرفعال" : "Inactive"
+
+                  return (
+                    <div key={user.id} className="rounded-xl border px-3.5 py-3 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="font-medium truncate">{user.name}</p>
+                          <p className="text-sm text-muted-foreground truncate">{user.contact}</p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <Badge variant={user.status === "active" ? "secondary" : "outline"}>
+                            {statusLabel}
+                          </Badge>
+                          <Button asChild size="sm" variant="outline">
+                            <Link href={localizePathname(`/dashboard/representatives/users/${user.id}`, locale)}>
+                              {locale === "fa" ? "نمایش" : "View"}
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                          <span>{user.configs.length} {locale === "fa" ? "کانفیگ" : "configs"}</span>
+                          <span>
+                            {totalCap > 0
+                              ? `${formatGigabytes(usedGb, locale)} / ${formatGigabytes(totalCap, locale)} GB`
+                              : locale === "fa" ? "بدون کانفیگ" : "No configs"}
+                          </span>
+                        </div>
+                        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                          {totalCap > 0 ? (
+                            <div
+                              className={`h-1.5 rounded-full transition-all ${barColor}`}
+                              style={{ width: `${percent}%` }}
+                            />
+                          ) : (
+                            <div className="h-1.5 rounded-full bg-muted-foreground/20 w-full" />
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm">{user.configs.length} {locale === "fa" ? "کانفیگ" : "configs"}</span>
-                    <span className="text-sm">{formatGigabytes(user.usage.totalGb, locale)} GB</span>
-                    <Badge variant={user.status === "active" ? "secondary" : user.status === "expiring" ? "outline" : "outline"}>
-                      {user.status}
-                    </Badge>
-                    <Button asChild size="sm" variant="outline">
-                      <Link href={localizePathname(`/dashboard/representatives/users/${user.id}`, locale)}>
-                        {locale === "fa" ? "نمایش" : "View"}
-                      </Link>
-                    </Button>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </SectionCard>

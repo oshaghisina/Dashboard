@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { ArrowLeft, Plus } from "lucide-react"
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 import { AssignConfigDrawer } from "@/features/representatives/assign-config-drawer"
 import { ExtendConfigDrawer } from "@/features/representatives/extend-config-drawer"
@@ -112,12 +113,50 @@ export function UserDetailPage({
             )}
           </SectionCard>
 
-          <SectionCard title={locale === "fa" ? "مصرف این ماه" : "Usage this month"}>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between gap-3"><span>{locale === "fa" ? "مصرف کل" : "Total bandwidth"}</span><strong>{formatGigabytes(user.usage.totalGb, locale)} GB</strong></div>
-              <div className="flex justify-between gap-3"><span>{locale === "fa" ? "آخرین فعالیت" : "Last active"}</span><strong>{formatDateTime(user.usage.lastActive, locale)}</strong></div>
-              <div className="flex justify-between gap-3"><span>{locale === "fa" ? "جلسات" : "Sessions"}</span><strong>{user.usage.sessions}</strong></div>
-              {user.notes ? <p className="rounded-xl border bg-muted/20 p-3 text-muted-foreground">{user.notes}</p> : null}
+          <SectionCard title={locale === "fa" ? "مصرف ۷ روز گذشته" : "Usage — last 7 days"}>
+            <div className="space-y-4">
+              <div className="h-40 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={user.usage.dailyUsage} margin={{ top: 4, right: 0, left: -24, bottom: 0 }}>
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(v) => `${v}G`}
+                    />
+                    <Tooltip
+                      formatter={(value) => [`${value} GB`, locale === "fa" ? "مصرف" : "Usage"]}
+                      cursor={{ fill: "hsl(var(--muted))" }}
+                    />
+                    <Bar dataKey="gb" radius={[4, 4, 0, 0]} className="fill-primary" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 border-t pt-4 text-center text-sm">
+                <div>
+                  <p className="text-muted-foreground">{locale === "fa" ? "مصرف کل" : "Total"}</p>
+                  <p className="font-semibold">{formatGigabytes(user.usage.totalGb, locale)} GB</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">{locale === "fa" ? "جلسات" : "Sessions"}</p>
+                  <p className="font-semibold">{user.usage.sessions}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">{locale === "fa" ? "آخرین فعالیت" : "Last active"}</p>
+                  <p className="font-semibold text-xs">{formatDateTime(user.usage.lastActive, locale)}</p>
+                </div>
+              </div>
+
+              {user.notes ? (
+                <p className="rounded-xl border bg-muted/20 p-3 text-sm text-muted-foreground">{user.notes}</p>
+              ) : null}
             </div>
           </SectionCard>
         </PageSection>

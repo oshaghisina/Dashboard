@@ -13,9 +13,11 @@ import {
   Wifi,
 } from "lucide-react"
 
+import { LOW_WALLET_BALANCE } from "@/features/wallet/wallet-data"
+import { useWallet } from "@/features/wallet/wallet-provider"
 import { recentActivity, subscriptionSummary, usageSummary } from "@/lib/mock-data/vpn"
 import { useLocaleContext } from "@/components/providers/locale-provider"
-import { formatDate, formatDateTime, formatGigabytes, formatNumber } from "@/lib/formatting"
+import { formatDate, formatDateTime, formatGigabytes, formatNumber, formatToman } from "@/lib/formatting"
 import { localizePathname } from "@/lib/i18n/routing"
 import type { RecentActivityRecord, SubscriptionSummary, UsageSummary } from "@/lib/types"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -108,6 +110,8 @@ const copy = {
     warningCritical: "Less than 5% of your quota remains.",
     warningExpired: "Your plan has expired. Renew now to resume VPN access.",
     warningExpiring: "Your plan expires soon. Renew now to keep your configs active.",
+    warningWalletEmpty: "Your wallet is empty. Top up before your next wallet-funded charge.",
+    warningWalletLow: "Your wallet balance is low.",
   },
   fa: {
     active: "فعال",
@@ -145,6 +149,8 @@ const copy = {
     warningCritical: "کمتر از ۵٪ از حجم شما باقی مانده است.",
     warningExpired: "پلن شما منقضی شده است. برای بازگشت دسترسی آن را تمدید کنید.",
     warningExpiring: "پلن شما به‌زودی منقضی می‌شود. برای حفظ کانفیگ‌ها همین حالا تمدید کنید.",
+    warningWalletEmpty: "موجودی کیف پول صفر است. پیش از شارژ بعدی آن را افزایش دهید.",
+    warningWalletLow: "موجودی کیف پول کم است.",
   },
 } as const
 
@@ -337,6 +343,7 @@ export function DashboardOverviewPage({
   demoState?: OverviewDemoState
 }) {
   const { locale } = useLocaleContext()
+  const { balance } = useWallet()
   const text = copy[locale]
   const overview = React.useMemo(() => buildOverviewViewModel(demoState), [demoState])
 
@@ -367,7 +374,8 @@ export function DashboardOverviewPage({
     expiryState === "expired" ||
     expiryState === "expiring" ||
     usageTone === "warning" ||
-    usageTone === "critical"
+    usageTone === "critical" ||
+    balance < LOW_WALLET_BALANCE
   const helperText =
     expiryState === "expired"
       ? text.helperExpired
@@ -437,9 +445,15 @@ export function DashboardOverviewPage({
   const warningMessage =
     expiryState === "expired"
       ? text.warningExpired
-      : usageTone === "critical"
+      : balance === 0
+        ? text.warningWalletEmpty
+        : usageTone === "critical"
         ? text.warningCritical
-        : text.warningExpiring
+        : expiryState === "expiring"
+          ? text.warningExpiring
+          : balance < LOW_WALLET_BALANCE
+            ? `${text.warningWalletLow} ${formatToman(balance, locale)}`
+            : text.warningExpiring
   const summaryToneClass = getSummaryToneClasses(expiryState)
 
   return (
@@ -482,7 +496,7 @@ export function DashboardOverviewPage({
               {isWarningState ? (
                 <Alert
                   className={
-                    expiryState === "expired"
+                    expiryState === "expired" || balance === 0
                       ? "border-destructive/30 bg-destructive/5 text-destructive"
                       : usageTone === "critical"
                         ? "border-destructive/30 bg-destructive/5 text-destructive"

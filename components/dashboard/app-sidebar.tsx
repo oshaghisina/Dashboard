@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Shield } from "lucide-react"
 
 import { useLocaleContext } from "@/components/providers/locale-provider"
+import { useDemoSession } from "@/components/providers/session-provider"
 import { localizePathname } from "@/lib/i18n/routing"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -28,6 +29,12 @@ import {
 export function AppSidebar() {
   const pathname = usePathname()
   const { direction, locale } = useLocaleContext()
+  const { session } = useDemoSession()
+  const navigationItems = vpnNavigationItems.filter(
+    (item) =>
+      item.key !== "representatives" ||
+      session.user?.role === "representative"
+  )
 
   return (
     <Sidebar
@@ -64,7 +71,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {vpnNavigationItems.map((item) => {
+              {navigationItems.map((item) => {
                 const Icon = item.icon
 
                 return (

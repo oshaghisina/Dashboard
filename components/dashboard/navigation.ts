@@ -9,6 +9,7 @@ import {
   LifeBuoy,
   Settings,
   Shield,
+  Users,
 } from "lucide-react"
 
 import type { AppLocale } from "@/lib/types"
@@ -21,6 +22,7 @@ export type VpnNavKey =
   | "billing"
   | "tickets"
   | "referral"
+  | "representatives"
   | "settings"
   | "notifications"
 
@@ -109,6 +111,19 @@ export const vpnNavigationItems: VpnNavigationItem[] = [
     title: {
       en: "Tickets",
       fa: "تیکت‌ها",
+    },
+  },
+  {
+    href: "/dashboard/representatives",
+    hint: {
+      en: "Manage users, assign configs, track usage",
+      fa: "مدیریت کاربران، تخصیص کانفیگ و پیگیری مصرف",
+    },
+    icon: Users,
+    key: "representatives",
+    title: {
+      en: "Representatives",
+      fa: "نمایندگان",
     },
   },
   {

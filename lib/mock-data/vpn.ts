@@ -23,6 +23,15 @@ export const demoUserProfile: DemoUserProfile = {
   planName: "Pro",
   planBadgeTone: "secondary",
   referralCode: "SINA42",
+  role: "representative",
+  walletBalance: 380_000,
+}
+
+export const standardDemoUserProfile: DemoUserProfile = {
+  ...demoUserProfile,
+  id: "user_sina_standard",
+  role: "user",
+  walletBalance: 120_000,
 }
 
 export const subscriptionSummary: SubscriptionSummary = {
@@ -323,6 +332,36 @@ export const initialNotifications: NotificationRecord[] = [
     title: "Config updated",
     unread: false,
   },
+  {
+    body: "200,000ت added to your wallet via Bank Transfer.",
+    category: "wallet",
+    createdAt: "2026-04-20T10:00:00.000Z",
+    ctaHref: "/dashboard/billing/wallet",
+    ctaLabel: "View wallet",
+    id: "notif_wallet_topup",
+    title: "Wallet topped up",
+    unread: true,
+  },
+  {
+    body: "Your wallet balance is below 50,000ت. Top up to avoid service interruption.",
+    category: "wallet",
+    createdAt: "2026-04-22T14:00:00.000Z",
+    ctaHref: "/dashboard/billing/wallet/topup",
+    ctaLabel: "Top up",
+    id: "notif_wallet_low",
+    title: "Low wallet balance",
+    unread: true,
+  },
+  {
+    body: "Ali Rezaei's Frankfurt config expires in 2 days.",
+    category: "representative",
+    createdAt: "2026-04-25T08:00:00.000Z",
+    ctaHref: "/dashboard/representatives/users/u-01",
+    ctaLabel: "Extend config",
+    id: "notif_rep_expiring",
+    title: "Config expiring soon",
+    unread: true,
+  },
 ]
 
 export const notificationPreferences: NotificationPreferenceState = {
@@ -330,6 +369,8 @@ export const notificationPreferences: NotificationPreferenceState = {
   expiryReminders: { email: true, inApp: true },
   paymentReceipts: { email: true, inApp: true },
   quotaAlerts: { email: true, inApp: true },
+  walletAlerts: { email: false, inApp: true },
+  representativeAlerts: { email: false, inApp: true },
   securityAlerts: { email: true, inApp: true },
 }
 

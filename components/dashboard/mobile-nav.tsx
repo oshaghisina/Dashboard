@@ -3,9 +3,10 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { CreditCard, Download, Ellipsis, Gift, LifeBuoy, Settings } from "lucide-react"
+import { CreditCard, Download, Ellipsis, Gift, LifeBuoy, Settings, Users } from "lucide-react"
 
 import { useLocaleContext } from "@/components/providers/locale-provider"
+import { useDemoSession } from "@/components/providers/session-provider"
 import { localizePathname } from "@/lib/i18n/routing"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -33,6 +34,11 @@ const moreItems = [
     key: "referral",
   },
   {
+    href: "/dashboard/representatives",
+    icon: Users,
+    key: "representatives",
+  },
+  {
     href: "/dashboard/settings",
     icon: Settings,
     key: "settings",
@@ -42,8 +48,14 @@ const moreItems = [
 export function MobileNav() {
   const pathname = usePathname()
   const { locale } = useLocaleContext()
+  const { session } = useDemoSession()
   const [open, setOpen] = React.useState(false)
   const primaryItems = vpnNavigationItems.slice(0, 3)
+  const visibleMoreItems = moreItems.filter(
+    (item) =>
+      item.key !== "representatives" ||
+      session.user?.role === "representative"
+  )
 
   return (
     <>
@@ -93,7 +105,7 @@ export function MobileNav() {
       {open ? (
         <div className="fixed inset-x-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 rounded-2xl border bg-background p-3 shadow-xl md:hidden">
           <div className="space-y-2">
-            {moreItems.map((item) => {
+            {visibleMoreItems.map((item) => {
               const source = vpnNavigationItems.find((entry) => entry.key === item.key)!
               const Icon = item.icon
 

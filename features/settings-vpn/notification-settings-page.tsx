@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { notificationPreferences } from "@/lib/mock-data/vpn"
 import { useLocaleContext } from "@/components/providers/locale-provider"
+import { useDemoSession } from "@/components/providers/session-provider"
 import { useUiState } from "@/components/providers/ui-provider"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
@@ -12,6 +13,7 @@ import { SectionCard } from "@/components/dashboard/section-card"
 
 export function NotificationSettingsPage() {
   const { locale } = useLocaleContext()
+  const { session } = useDemoSession()
   const { addToast } = useUiState()
   const [preferences, setPreferences] = React.useState(notificationPreferences)
 
@@ -20,6 +22,10 @@ export function NotificationSettingsPage() {
     { key: "expiryReminders", label: locale === "fa" ? "یادآوری انقضا" : "Expiry reminders" },
     { key: "paymentReceipts", label: locale === "fa" ? "رسید پرداخت" : "Payment receipts" },
     { key: "configChanges", label: locale === "fa" ? "تغییرات کانفیگ" : "Config changes" },
+    { key: "walletAlerts", label: locale === "fa" ? "هشدار کیف پول" : "Wallet alerts" },
+    ...(session.user?.role === "representative"
+      ? [{ key: "representativeAlerts", label: locale === "fa" ? "هشدار نمایندگان" : "Representative alerts" } as const]
+      : []),
     { key: "securityAlerts", label: locale === "fa" ? "هشدار امنیتی" : "Security alerts" },
   ] as const
 

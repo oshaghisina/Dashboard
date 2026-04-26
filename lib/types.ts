@@ -3,6 +3,7 @@ export type DashboardRole = "owner" | "admin" | "editor" | "viewer"
 export type AppLocale = "en" | "fa"
 export type AppDirection = "ltr" | "rtl"
 export type DemoSessionStatus = "anonymous" | "authenticated" | "expired"
+export type UserRole = "user" | "representative"
 
 export interface DemoUserProfile {
   id: string
@@ -11,6 +12,8 @@ export interface DemoUserProfile {
   planName: "Free" | "Pro" | "VIP"
   planBadgeTone: "default" | "secondary" | "outline"
   referralCode: string
+  role: UserRole
+  walletBalance: number
 }
 
 export interface DemoSessionState {
@@ -124,7 +127,7 @@ export interface InvoiceRecord {
 export interface CheckoutState {
   planId: string
   cycle: "monthly" | "quarterly" | "yearly"
-  paymentMethod: "card" | "crypto" | "bank"
+  paymentMethod: "wallet" | "card" | "crypto" | "bank"
   promoCode: string
   appliedPromoCode: string | null
   status: "idle" | "processing" | "success" | "error"
@@ -136,7 +139,7 @@ export interface NotificationRecord {
   title: string
   body: string
   createdAt: string
-  category: "billing" | "usage" | "config" | "system"
+  category: "billing" | "usage" | "config" | "system" | "wallet" | "representative"
   unread: boolean
   ctaLabel?: string
   ctaHref?: string
@@ -147,6 +150,8 @@ export interface NotificationPreferenceState {
   expiryReminders: { email: boolean; inApp: boolean }
   paymentReceipts: { email: boolean; inApp: boolean }
   configChanges: { email: boolean; inApp: boolean }
+  walletAlerts: { email: boolean; inApp: boolean }
+  representativeAlerts: { email: boolean; inApp: boolean }
   securityAlerts: { email: boolean; inApp: boolean }
 }
 

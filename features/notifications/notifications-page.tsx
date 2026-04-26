@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 
 import { useLocaleContext } from "@/components/providers/locale-provider"
+import { useDemoSession } from "@/components/providers/session-provider"
 import { useUiState } from "@/components/providers/ui-provider"
 import { formatDate } from "@/lib/formatting"
 import { localizePathname } from "@/lib/i18n/routing"
@@ -13,12 +14,18 @@ import { DashboardPage } from "@/components/dashboard/dashboard-page"
 import { PageSection } from "@/components/dashboard/page-section"
 import { SectionCard } from "@/components/dashboard/section-card"
 
-type FilterKey = "all" | "billing" | "config" | "system" | "usage"
+type FilterKey = "all" | "billing" | "config" | "system" | "usage" | "wallet" | "representative"
 
 export function NotificationsPage() {
   const { locale } = useLocaleContext()
+  const { session } = useDemoSession()
   const { markAllNotificationsRead, markNotificationRead, notifications } = useUiState()
   const [filter, setFilter] = React.useState<FilterKey>("all")
+  const filterKeys: FilterKey[] = ["all", "billing", "usage", "config", "wallet", "system"]
+
+  if (session.user?.role === "representative") {
+    filterKeys.splice(filterKeys.length - 1, 0, "representative")
+  }
 
   const visibleNotifications =
     filter === "all"
@@ -41,7 +48,7 @@ export function NotificationsPage() {
     >
       <PageSection>
         <div className="flex flex-wrap gap-2">
-          {(["all", "billing", "usage", "config", "system"] as FilterKey[]).map((item) => (
+          {filterKeys.map((item) => (
             <Button
               key={item}
               type="button"

@@ -366,6 +366,14 @@ Appears as a **banner below the top bar** (not a bottom sheet — requires immed
 | Config updated | Server migration | Info | ✓ | — | ✓ |
 | New login | Unrecognized device | Security | ✓ | ✓ | — |
 | Password changed | User changes password | Security | ✓ | ✓ | — |
+| **Wallet top-up success** | Top-up payment confirmed | Info | ✓ | — | ✓ |
+| **Wallet low balance** | Balance drops below 50,000 ت | Medium | ✓ | — | ✓ (once per day) |
+| **Wallet empty** | Balance reaches zero | High | ✓ | — | Persistent banner |
+| **Rep: config assigned** | Rep assigns config to user | Info | ✓ | — | ✓ |
+| **Rep: config expiring (3 days)** | A rep-managed config expires in 3 days | Medium | ✓ | — | — |
+| **Rep: config expired** | A rep-managed config has expired | High | ✓ | — | ✓ |
+
+> Wallet and Representative notification types are only generated for users with the relevant role/feature. Regular users never see rep-type notifications.
 
 ---
 
@@ -377,9 +385,11 @@ Banners appear at the top of the main content area (below page header). Only one
 
 1. Plan expired — red
 2. Quota 100% — red
-3. Plan expiring ≤1 day — red
-4. Quota ≥95% — amber
-5. Plan expiring ≤7 days — amber
+3. Wallet empty (balance = 0, only shown to reps or users mid-checkout) — red
+4. Plan expiring ≤1 day — red
+5. Quota ≥95% — amber
+6. Plan expiring ≤7 days — amber
+7. Wallet low balance (< 50,000 ت) — amber
 
 ### Banner Anatomy
 
@@ -439,6 +449,9 @@ Located at `/dashboard/settings/notifications`:
 │  Plan Expiry Reminders    Email  [✓]  In-App  [✓]     │
 │  Payment Receipts         Email  [✓]  In-App  [✓]     │
 │  Config Changes           Email  [✗]  In-App  [✓]     │
+│  Wallet Alerts            Email  [✗]  In-App  [✓]     │
+│  Representative Alerts    Email  [✗]  In-App  [✓]     │
+│                           (only shown for reps)        │
 │  Security Alerts          Email  [✓]  In-App  [✓]     │
 │                           (locked — cannot disable)    │
 │  ────────────────────────────────────────────────      │
@@ -447,6 +460,8 @@ Located at `/dashboard/settings/notifications`:
 ```
 
 - Security alerts (new login, password change) cannot be disabled
+- **Wallet Alerts** row: shown for all users — covers low balance and top-up confirmations; in-app only by default (no email)
+- **Representative Alerts** row: only rendered when `currentUser.role === "representative"` — covers config expiry for managed users; in-app only by default
 - Changes save immediately with success toast
 - Email preference changes take effect within a few minutes
 
@@ -487,7 +502,7 @@ Shown as a high-priority notification with a lock icon. If a new login is detect
 ┌──────────────────────────────────────────────────────────────┐
 │  All Notifications                    [Mark all read] [⚙]   │
 │  ──────────────────────────────────────────────────────────  │
-│  Filter: [All] [Billing] [Usage] [Security] [System]         │
+│  Filter: [All] [Billing] [Usage] [Wallet] [Security] [System]  ← [Representatives] appended for reps         │
 │  ──────────────────────────────────────────────────────────  │
 │  ● Usage alert          2h ago                               │
 │    You've used 80% of your monthly data.                     │
@@ -528,7 +543,7 @@ Shown as a high-priority notification with a lock icon. If a new login is detect
 
 - `notifications[]`
 - `notifications[i].id`
-- `notifications[i].type`: `billing | usage | security | system | config`
+- `notifications[i].type`: `billing | usage | security | system | config | wallet | representative`
 - `notifications[i].read`
 - `notifications[i].title`
 - `notifications[i].body`
@@ -588,10 +603,44 @@ const notificationsDemo = {
                         ctaLabel: "View Receipt",
                         ctaHref: "/dashboard/billing/invoices/TUN-0411-001",
                 },
+                {
+                        id: "n3",
+                        type: "wallet",
+                        read: false,
+                        title: "Wallet topped up",
+                        body: "۲۰۰٬۰۰۰ت added to your wallet via Bank Transfer.",
+                        timestamp: "Apr 20",
+                        ctaLabel: "View Wallet",
+                        ctaHref: "/dashboard/billing/wallet",
+                },
+                {
+                        id: "n4",
+                        type: "wallet",
+                        read: false,
+                        title: "Low wallet balance",
+                        body: "Your wallet balance is below ۵۰٬۰۰۰ت. Top up to avoid service interruption.",
+                        timestamp: "1h ago",
+                        ctaLabel: "Top Up",
+                        ctaHref: "/dashboard/billing/wallet/topup",
+                },
+                {
+                        id: "n5",
+                        type: "representative",
+                        read: false,
+                        title: "Config expiring soon",
+                        body: "Ali Rezaei's Frankfurt config expires in 2 days.",
+                        timestamp: "3h ago",
+                        ctaLabel: "Extend Config",
+                        ctaHref: "/dashboard/representatives/users/u-01",
+                },
         ],
         preferences: {
-                quotaAlerts: { email: true, inApp: true },
-                configChanges: { email: false, inApp: true },
+                quotaAlerts:         { email: true,  inApp: true },
+                planExpiry:          { email: true,  inApp: true },
+                paymentReceipts:     { email: true,  inApp: true },
+                configChanges:       { email: false, inApp: true },
+                walletAlerts:        { email: false, inApp: true },
+                representativeAlerts:{ email: false, inApp: true }, // only used when role = "representative"
         },
 }
 ```

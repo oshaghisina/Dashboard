@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { DEMO_PASSWORD, DEMO_SESSION_COOKIE } from "@/lib/app-constants"
 import type { DemoSessionState, DemoUserProfile } from "@/lib/types"
-import { demoUserProfile } from "@/lib/mock-data/vpn"
+import { demoUserProfile, standardDemoUserProfile } from "@/lib/mock-data/vpn"
 
 type LoginOutcome =
   | { ok: true }
@@ -30,6 +30,9 @@ const SessionContext = React.createContext<SessionContextValue | null>(null)
 
 function buildUserFromEmail(email: string): DemoUserProfile {
   const localPart = email.split("@")[0] || "sina"
+  const baseProfile = email.includes("standard")
+    ? standardDemoUserProfile
+    : demoUserProfile
   const displayName = localPart
     .split(/[._-]/g)
     .filter(Boolean)
@@ -37,7 +40,7 @@ function buildUserFromEmail(email: string): DemoUserProfile {
     .join(" ")
 
   return {
-    ...demoUserProfile,
+    ...baseProfile,
     displayName,
     email,
   }

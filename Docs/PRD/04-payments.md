@@ -114,7 +114,7 @@ Expandable "Full comparison →" that shows a full feature matrix table.
 │  [Promo code input        ] [Apply]                        │
 │                                                            │
 │  Pay with                                                  │
-│  [💳 Credit/Debit Card]  [₿ Crypto]  [🏦 Bank Transfer]   │
+│  [💰 Wallet]  [💳 Credit/Debit Card]  [₿ Crypto]  [🏦 Bank]│
 │  ─────────────────────────────────────────────────────     │
 │  Card Number  [                    ]                       │
 │  Expiry       [MM/YY]  CVV  [   ]                         │
@@ -137,7 +137,16 @@ Expandable "Full comparison →" that shows a full feature matrix table.
 
 ### Payment Method Tabs
 
-#### Credit/Debit Card (default)
+Tab order: **Wallet** (first, if balance > 0) · Card · Crypto · Bank Transfer.
+
+See `10-wallet.md §10.3` for the full Wallet tab spec (balance display, deduction preview, insufficient-balance CTA). Implement the Wallet tab panel by importing the shared wallet panel from `features/wallet/` — do not duplicate the logic here.
+
+#### Wallet
+
+- Shown as the first tab when `walletBalance > 0`; shown but disabled (badge: "Empty") when `walletBalance === 0`
+- Panel behaviour: see [10-wallet.md — §10.3](./10-wallet.md)
+
+#### Credit/Debit Card (default when no wallet balance)
 - Card-entry form rendered with local UI fields only
 - Real-time card type detection (Visa/MC/Amex icon)
 - CVV tooltip explaining what it is
@@ -338,7 +347,7 @@ Accessed via "Cancel" on Billing Home. Intentionally not buried, but includes a 
 │         [اعمال]  [         کد تخفیف وارد کنید         ]   │
 │                                                            │
 │                                        روش پرداخت          │
-│   [🏦 کارت به کارت]  [₿ رمزارز]  [💳 کارت بانکی]         │
+│   [🏦 کارت به کارت]  [₿ رمزارز]  [💳 کارت بانکی]  [💰 کیف پول]│
 │  ─────────────────────────────────────────────────────     │
 │                       [              ] شماره کارت          │
 │            [   ]  CVV      [MM/YY]       تاریخ انقضا       │

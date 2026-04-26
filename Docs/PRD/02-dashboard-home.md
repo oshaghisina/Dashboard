@@ -142,7 +142,9 @@ Replaces stat cards + activity feed with a single centered onboarding card:
 │  Configs         │
 │  Usage           │
 │  Billing         │
+│  Wallet          │
 │  Referral        │
+│  Representatives │  ← visible only when role = "representative"
 ├──────────────────┤
 │  Settings        │
 ├──────────────────┤
@@ -158,6 +160,8 @@ Replaces stat cards + activity feed with a single centered onboarding card:
 - Active item: filled background, full-width
 - Plan badge in sidebar footer: `Free` (muted) / `Pro` (blue) / `VIP` (gold)
 - Sidebar collapses to icon-only mode at `md` breakpoint; full menu on `lg+`
+- **Wallet** is part of Billing — links to `/dashboard/billing/wallet` from the Billing hub, not as a standalone sidebar item.
+- **Representatives** is conditionally rendered: only visible when `currentUser.role === "representative"` — links to `/dashboard/representatives`; hidden entirely for standard users (not greyed out, not shown)
 
 ---
 
@@ -226,6 +230,8 @@ Replaces stat cards + activity feed with a single centered onboarding card:
 ┌────────────────────────┐
 │  ────                  │  ← drag handle
 │  [💳]  Billing         │
+│  [💰]  Wallet          │
+│  [👥]  Representatives │  ← only when role = "representative"
 │  [⚙]  Settings        │
 │  [👤]  Profile         │
 │  [→]   Sign out        │
@@ -347,6 +353,8 @@ On landscape (`height < 500px`):
 │       کانفیگ‌ها   │
 │           مصرف   │
 │      صورتحساب    │
+│       کیف پول    │
+│         معرفی    │  ← فقط برای نمایندگان
 ├──────────────────┤
 │        تنظیمات   │
 ├──────────────────┤
@@ -426,6 +434,7 @@ On landscape (`height < 500px`):
 - `recentActivity[]`
 - `showExpiryBanner`
 - `hasDataError`
+- `currentUser.role`: `"user" | "representative"` — controls sidebar and More-sheet visibility of the Representatives item
 
 ### Done Criteria
 
@@ -467,4 +476,3 @@ const dashboardOverviewDemo = {
 	hasDataError: false,
 }
 ```
-

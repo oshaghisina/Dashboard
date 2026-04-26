@@ -20,6 +20,8 @@
 | 07 | [Notifications & Alerts](./07-notifications.md) | In-app toasts, email triggers, quota warnings, system alerts |
 | 08 | [Referral System](./08-referral.md) | Unique referral codes, signup with code, referral dashboard, rewards |
 | 09 | [Download Assets](./09-download-assets.md) | Client app downloads, platform cards, install guidance, OS compatibility |
+| 10 | [Wallet](./10-wallet.md) | Personal wallet balance, top-up flow, transaction history, wallet payment tab at checkout |
+| 11 | [Representatives](./11-representatives.md) | Rep dashboard, user management, config assignment & extension, wallet-funded charges |
 
 ---
 
@@ -109,6 +111,7 @@ Every screen is designed mobile-first. Full responsive details live in each feat
 | **Everyday User** | Non-technical, uses VPN for privacy | One-tap config import, knows when it expires |
 | **Power User** | Tech-savvy, runs multiple devices | Multi-config management, raw JSON access |
 | **Admin / Reseller** | Manages accounts for others | Usage overview per account, bulk config download |
+| **Representative** | Promoted by Admin; resells VPN configs to end-users | Create & charge configs for their users, pay from wallet, track usage per user |
 
 ---
 

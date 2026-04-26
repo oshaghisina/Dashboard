@@ -16,6 +16,14 @@ export function formatCurrency(value: number, locale: AppLocale) {
   }).format(locale === "fa" ? value * 820000 : value)
 }
 
+export function formatToman(value: number, locale: AppLocale) {
+  const formatted = new Intl.NumberFormat(getLocaleTag(locale), {
+    maximumFractionDigits: 0,
+  }).format(value)
+
+  return locale === "fa" ? `${formatted}ت` : `${formatted} T`
+}
+
 export function formatDate(value: string, locale: AppLocale) {
   return new Intl.DateTimeFormat(getLocaleTag(locale), {
     dateStyle: "medium",

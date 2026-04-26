@@ -1,8 +1,8 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Shield } from "lucide-react"
 
 import { useLocaleContext } from "@/components/providers/locale-provider"
 import { useDemoSession } from "@/components/providers/session-provider"
@@ -48,12 +48,10 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg" className="gap-3">
               <Link href={localizePathname("/dashboard", locale)}>
-                <span className="flex size-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
-                  <Shield className="size-4" />
-                </span>
+                <Image src="/logo.png" alt="Sharknet" width={36} height={36} className="dark:invert" />
                 <span className="grid flex-1 text-sm leading-tight">
                   <span className="font-semibold">
-                    {locale === "fa" ? "تونل" : "Tunnel"}
+                    {locale === "fa" ? "شارک نت" : "Sharkent"}
                   </span>
                   <span className="text-xs text-sidebar-foreground/70">
                     {locale === "fa" ? "داشبورد مشترک" : "Subscriber dashboard"}

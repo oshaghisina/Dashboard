@@ -3,33 +3,23 @@
 @import "./shadcn-tailwind.css";
 
 @font-face {
-  font-family: "Ravi";
+  font-family: "IRANYekanX";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
   src:
-    url("/fonts/ravi/Ravi-Regular.woff2") format("woff2"),
-    url("/fonts/ravi/Ravi-Regular.woff") format("woff");
+    url("/fonts/iranyekanx/IRANYekanX-Regular.woff2") format("woff2"),
+    url("/fonts/iranyekanx/IRANYekanX-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: "Ravi";
+  font-family: "IRANYekanX";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
   src:
-    url("/fonts/ravi/Ravi-Bold.woff2") format("woff2"),
-    url("/fonts/ravi/Ravi-Bold.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Ravi";
-  font-style: normal;
-  font-weight: 950;
-  font-display: swap;
-  src:
-    url("/fonts/ravi/Ravi-ExtraBlack.woff2") format("woff2"),
-    url("/fonts/ravi/Ravi-ExtraBlack.woff") format("woff");
+    url("/fonts/iranyekanx/IRANYekanX-Bold.woff2") format("woff2"),
+    url("/fonts/iranyekanx/IRANYekanX-Bold.woff") format("woff");
 }
 
 @import "../registry/styles/style-nova.css" layer(base);

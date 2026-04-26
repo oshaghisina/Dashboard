@@ -1,7 +1,8 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { Bell, Shield } from "lucide-react"
+import Image from "next/image"
+import { Bell } from "lucide-react"
 
 import { useLocaleContext } from "@/components/providers/locale-provider"
 import { useUiState } from "@/components/providers/ui-provider"
@@ -31,12 +32,10 @@ export function AppHeader() {
             </div>
 
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
-                <Shield className="size-4" />
-              </div>
+              <Image src="/logo.png" alt="Sharknet" width={36} height={36} className="dark:invert" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold tracking-tight">
-                  {locale === "fa" ? "تونل" : "Tunnel"}
+                  {locale === "fa" ? "شارک نت" : "Sharkent"}
                 </p>
                 <p className="hidden truncate text-xs text-muted-foreground md:block">
                   {currentPage.title[locale]}

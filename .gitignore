@@ -6,3 +6,9 @@ coverage
 pnpm-lock.yaml
 *.log
 
+# OS files
+.DS_Store
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
